@@ -32,6 +32,15 @@ app.get('/', function(req, res){
   res.render('unownpuzzle');
 });
 
+
+app.get('/memory/', function(req, res){
+  res.render('memory');
+});
+
+app.get('/puzzle/', function(req, res){
+  res.render('unownpuzzle');
+});
+
 //ERRORS:
 //mount the app requests with the functions
 app.use(function (err, req, res, next){
