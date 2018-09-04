@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../css/upuzzle.css" >
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <title>Pxg - Unown Puzzle</title>
+  </head>
+  <body>
+      <div id="divPuzzle"></div>
+      <div id="clock">
+        <span class="min"></span>
+        <span class="sec"></span>
+      </div>
+  </body>
+  <script type="text/javascript">
+
+
+    /* FUNCTIONS */
+
+    var createPuzzleGame = () => {
+
+      elTable = document.createElement("table");
+      elTable.setAttribute("id", "tablePuzzle");
+
+      var elLine, elCard;
+      var nLines = 8;
+      var nColumns = 13;
+
+      for(var l=0; l<8; l++){
+        elLine = document.createElement("tr");
+        elLine.classList.add(`line-${l}`);
+        for(var h=0; h<13; h++){
+          elCard = document.createElement("td");
+          elCard.classList.add(`puzzle-piece`);
+          elCard.classList.add(`card-${l}-${h}`);
+          elCard.setAttribute("draggable", "true");
+
+          elCard.dataset.number = obj.order[(l*nColumns)+h];
+          elCard.style.backgroundImage = `url(../img/puzzle/${obj.order[(l*nColumns)+h]}.png)`;
+
+          elCard.addEventListener("dragstart", function(e){
+            e.dataTransfer.setData("number", e.target.dataset.number);
+            e.dataTransfer.setData("class", e.target.classList[1]);
+          }, false);
+
+          elCard.addEventListener("dragover", function(e){
+            e.preventDefault();
+          }, false);
+
+          elCard.addEventListener("drop", function(e) {
+            //get number and class name of the element which got the drop event
+            let elPreviousNumber = e.dataTransfer.getData("number");
+            let elPreviousClassName = e.dataTransfer.getData("class");
+            let elPrevious = document.querySelector(`.${elPreviousClassName}`);
+            //console.log(elPrevious, elPreviousClassName);
+
+            //save previous element number and name (elDragEnd)
+            let elCurrent = e.target;
+            let elCurrentNumber = e.target.dataset.number;
+
+            //swap numbers between the elements
+            elCurrent.dataset.number = elPreviousNumber;
+            elPrevious.dataset.number = elCurrentNumber;
+
+            //change background image of the elements
+            elCurrent.style.backgroundImage = `url(../img/puzzle/${elPreviousNumber}.png)`;
+            elPrevious.style.backgroundImage = `url(../img/puzzle/${elCurrentNumber}.png)`;
+            //console.log(e.target.classList[1]);
+          }, false);
+
+          elLine.appendChild(elCard);
+        }
+        elTable.appendChild(elLine);
+      }
+      divPuzzle = document.getElementById("divPuzzle");
+      divPuzzle.appendChild(elTable);
+    }
+
+    //populates the obj with the numbers of puzzle pieces this game
+    var generatePuzzleNumbers = () => {
+      let randomNumber = Math.floor((Math.random()*obj.max)+1);
+
+      if(obj.order.includes(randomNumber)){
+        console.log(`${randomNumber} exists in array`);
+      }else{
+        obj.order.push(randomNumber);
+        console.log(`${obj.order.length} - randomNumber: ${randomNumber}`);
+
+        if(randomNumber == obj.max){
+          obj.max--;
+        }
+      }
+    }
+
+    var stopwatch = () => {
+      setTimeout(function(){
+        clockSec++;
+        if(clockSec>60){
+          clockSec = 0;
+          clockMin++;
+          clockMinSpan.innerHTML = `${clockMin} min`;
+        }
+        clockSecSpan.innerHTML = `${clockSec} sec`;
+
+        stopwatch();
+      }, 1000);
+    }
+
+    /* CODE */
+
+    //generate Pokemon Card (number)
+    var obj = {}
+    obj.min = 1;
+    obj.max = 104;
+    obj.order = [];
+
+    //generate 104 piece of puzzle numbers
+    while(obj.order.length < 104){
+      generatePuzzleNumbers();
+    }
+
+    console.log(`puzzleObj`);
+    console.log(obj);
+    
+    createPuzzleGame();
+
+    var clockMinSpan = document.querySelector("#clock .min");
+    var clockSecSpan = document.querySelector("#clock .sec");
+    var clockSec = 0;
+    var clockMin = 0;
+    stopwatch();
+
+  </script>
+</html>

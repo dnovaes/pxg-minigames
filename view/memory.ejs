@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../css/memory.css" >
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <title>Pxg Memory Game</title>
+  </head>
+  <body>
+      <div id="divMemory"></div>
+      <div id="clock">
+        <span class="min"></span>
+        <span class="sec"></span>
+      </div>
+  </body>
+  <script type="text/javascript">
+
+
+    /* FUNCTIONS */
+
+    var createMemoryDivs = () => {
+
+      elTable = document.createElement("table");
+      elTable.setAttribute("id", "tableMemory");
+
+      var nSelected = 0;
+      var cardsSelected = [];
+      var elLine, elCard;
+      var nLines = 6;
+      var nColumns = 10;
+
+      for(var l=0; l<nLines; l++){
+          elLine = document.createElement("tr");
+          //elTableColumn.cloneNode(true);
+          elLine.classList.add(`line-${l}`);
+          for(var h=0; h<nColumns; h++){
+              elCard = document.createElement("td");
+              elCard.classList.add(`card`);
+              elCard.classList.add(`card-${l}-${h}`);
+
+              elCard.dataset.fPicked = 0;
+              elCard.dataset.number = cardObj.order[l*nColumns+h];
+              //elCard.innerHTML = cardObj.order[l*10+h];
+
+              elCard.addEventListener("click", function(e){
+                //console.log(`card clicked:`);
+                //console.log(e.target);
+                //alert(e.target.style.backgroundImage);
+                if((nSelected < 2)&&(e.target.dataset.fPicked == 0)){
+                  e.target.classList.add(`flipped`);
+                  e.target.dataset.fPicked = 1;
+                  //e.target.style.backgroundImage = "none";
+                  //e.target.style.backgroundColor = "transparent";
+                  e.target.style.backgroundImage = `url(../img/memory/${e.target.dataset.number}.png)`;
+
+                  //count selected card
+                  nSelected++;
+                  cardsSelected.push(e.target);
+
+                  console.log(`number of cards selected: ${nSelected}`)
+                  if(nSelected == 2){
+                    setTimeout(function(){
+                      //if the two cards are equal, delete them
+                      let c1 = cardsSelected.pop();
+                      let c2 = cardsSelected.pop();
+                      //if numbers are NOT equal, put them back to the game
+                      console.log(`${c1.dataset.number} == ${c2.dataset.number}?`);
+                      if(c1.dataset.number != c2.dataset.number){
+                        c1.dataset.fPicked = 0;
+                        c2.dataset.fPicked = 0;
+                        c1.style.backgroundImage = "url(../img/memory/card.png)";
+                        c2.style.backgroundImage = "url(../img/memory/card.png)";
+                        c1.classList.remove(`flipped`);
+                        c2.classList.remove(`flipped`);
+                        console.log(c1);
+                      }else{
+                        c1.style.backgroundImage = "none";
+                        c2.style.backgroundImage = "none";
+                        cardObj.cardsPicked++;
+                        if(cardObj.cardsPicked == 30){
+                          alert(`CONGRATS! Game finished in ${clock} seconds!`)
+                        }
+                      }
+                      nSelected = 0;
+                      console.log("nSelected = 0\nYou can pick cards now");
+                    }, 700);
+                  }
+                }
+              });
+
+              elLine.appendChild(elCard);
+          }
+          elTable.appendChild(elLine);
+      }
+      divMemory = document.getElementById("divMemory");
+      divMemory.appendChild(elTable);
+    }
+
+    //populates the cardObj obj with the numbers of pokemon cards in this game
+    var generatePkmCards = (card) => {
+      cardNumber = Math.floor((Math.random()*card.max)+1);
+
+      if((card.numbersPicked[cardNumber]==2)&&(card.numbersPicked[cardNumber]==2)&&(card.order.length<60)){
+        generatePkmCards(card);
+      }else{
+        card.order.push(cardNumber);
+        card.numbersPicked[cardNumber]++;
+
+        if(card.numbersPicked[cardNumber]==2){
+          if(cardNumber == card.min){
+            card.min++;
+          }else if(cardNumber == card.max){
+            card.max--;
+          }
+        }
+      }
+      //console.log(card.order);
+    }
+
+    var stopwatch = () => {
+      setTimeout(function(){
+        clockSec++;
+        if(clockSec>60){
+          clockSec = 0;
+          clockMin++;
+          clockMinSpan.innerHTML = `${clockMin} min`;
+        }
+        clockSecSpan.innerHTML = `${clockSec} sec`;
+
+        stopwatch();
+      }, 1000);
+    }
+
+    /* CODE */
+
+    //generate Pokemon Card (number)
+    var cardObj = {}
+    cardObj.min = 0;
+    cardObj.max = 30;
+    cardObj.order= [];
+    cardObj.numbersPicked = [];
+    cardObj.cardsPicked = 0;
+
+    for(i=1; i<31; i++){
+      cardObj.numbersPicked[i] = 0;
+    }
+
+    while(cardObj.order.length < 60){
+      generatePkmCards(cardObj);
+    }
+    console.log(`cardObj`);
+    console.log(cardObj);
+    
+    createMemoryDivs();
+    var clockMinSpan = document.querySelector("#clock .min");
+    var clockSecSpan = document.querySelector("#clock .sec");
+    var clockSec = 0;
+    var clockMin = 0;
+    stopwatch();
+
+  </script>
+</html>

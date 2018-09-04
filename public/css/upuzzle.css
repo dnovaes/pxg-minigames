@@ -1,0 +1,30 @@
+body{
+  background: url("../img/textures_dark_vertical.jpg") repeat;
+}
+
+table{
+  border: 0px;
+  border-collapse: collapse;
+  border-spacing: 0px;
+  margin: 0 auto;
+}
+
+.puzzle-piece{
+  display: block; 
+  width: 43px;
+  height: 43px;
+  background-size: cover;
+  float: left;
+}
+
+.card.flipped{
+  height: 40px;
+  margin-top: 3px;
+}
+
+#clock{
+  margin: 0 auto;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+}

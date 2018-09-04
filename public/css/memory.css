@@ -1,0 +1,27 @@
+table{
+  border: none;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+.card{
+  display: block; 
+  width: 40px;
+  height: 46px;
+  background-image: url(../img/memory/card.png);
+  background-size: cover;
+  transform: scale(0.9);
+  float: left;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.card.flipped{
+  height: 40px;
+  margin-top: 3px;
+}
+
+#clock{
+  margin: 0 auto;
+  text-align: center;
+}
