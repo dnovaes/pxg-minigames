@@ -28,3 +28,11 @@ table{
   color: white;
   font-weight: bold;
 }
+
+#divPuzzleFull{
+  margin: 0 auto;
+  margin-top: 0px;
+  width: 640px;
+  transform: scale(0.9);
+  margin-top: -25px;
+}
