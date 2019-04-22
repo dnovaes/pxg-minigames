@@ -1,0 +1,45 @@
+body{
+  background: url("../img/textures_dark_vertical.jpg") repeat;
+}
+
+*{
+  margin: 0 auto;
+  color: white;
+}
+
+#divMain{
+  margin-top: 20px;
+  width: 390px;
+}
+
+#divMain .title{
+  text-align: center;
+  padding: 8px;
+  font-size: 25px;
+}
+
+#divImage{
+  position:relative;
+  margin: 0 auto;
+}
+
+input{
+  padding: 8px;
+  width: 300px;
+  color: black;
+  /*#ed1b24*/
+}
+
+#divInput{
+  width: 300px;
+  position: relative;
+  margin-bottom: 8px;
+}
+
+#divLastCode{
+  position: relative;
+  width: 300px;
+  padding: 8px;
+  white-space: initial;
+  word-wrap: break-word;
+}

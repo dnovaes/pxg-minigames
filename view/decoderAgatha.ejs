@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../css/decoder.css" >
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <title>Pxg - Decoder DA</title>
+  </head>
+  <body>
+      <div id="divResult"></div>
+      <div id="divMain">
+        <p class="title">Decoder Dark Abra Quest</p>
+        <div id="divInput">
+          <input id="inputDecode"></input>
+        </div>
+        <div id="divImage">
+          <div id="markResult"></div>
+          <img src="../img/decoder/agatha_quest.jpg"></img>
+          <div id="divLastCode"></div>
+        </div>
+      </div>
+  </body>
+  <script type="text/javascript">
+    //code-examples 
+    /*
+    AWMWGYWMWWGWGWYMYGYGYYWWGWYWYMGGGWMYWWYWWGYMYMWYWWYGYYMYWGMYWMYWYGMWMYWWMMMM
+    result: 1,1
+
+    FYMGGMGGMMGMMYMMGGYYWYYYMGYGGGWYMYWYGWMGYWGMWYWYMGGGWMWYMMMMWWGGMYGYWYWGMYWM
+    result: 3,2
+    */
+
+    /* FUNCTIONS */
+    let divInput = document.querySelector('#inputDecode');
+    console.log(divInput)
+
+    divMark = document.querySelector(`#markResult`)
+    divLastCode = document.querySelector(`#divLastCode`)
+
+    divMark.style.width= "60px"
+    divMark.style.height= "50px"
+    divMark.style.backgroundColor = "red"
+    divMark.style.position = "absolute"
+    divMark.style.display = "none"
+
+    divInput.addEventListener("keypress", function(e) {
+      let chCode = e.which || e.keyCode
+      if(chCode == '13'){
+        let code = divInput.value
+
+        console.dir(code)
+
+        if(code.length < 76){
+          alert("Código deve conter 76 letras");
+        }else{
+          decodeAgatha(code)
+        }
+      }
+    },false);
+
+    var sleep = (ms) => {
+      return new Promise(resolve => setTimeout(resolve, ms))
+    }
+
+    var decodeAgatha = async code => {
+        let line = 1
+        let column = 1
+        let lastCodeText
+        let codeExecuted = ""
+
+        for(var i=0;i<code.length;i++){
+          switch(code[i]){
+            case 'F':
+              line = 1
+              column = 1
+              lastCodeText = 'F'
+              break;
+            case 'K':
+              line = 1
+              column = 4 
+              lastCodeText = 'K'
+              break;
+            case 'Z':
+              line = 4 
+              column = 1
+              lastCodeText = 'Z'
+              break;
+            case 'A':
+              line = 4
+              column = 4
+              lastCodeText = 'A'
+              break;
+            case 'M': //Cima
+              if(line>1){
+                line--; 
+              }else{
+                line = 4;
+              }
+              lastCodeText = 'Up'
+              break;
+            case 'Y': //Para baixo
+              if(line<4){
+                line++; 
+              }else{
+                line = 1;
+              }
+              lastCodeText = 'Down'
+              break;
+            case 'W': //Direita
+              if(column<4){
+                column++; 
+              }else{
+                column = 1;
+              }
+              lastCodeText = 'Right'
+              break;
+            case 'G': //Esquerda
+              if(column>1){
+                column--;
+              }else{
+                column = 4;
+              }
+              lastCodeText = 'Left'
+              break;
+          }
+          //showing current position
+          divMark.style.top = 102*(line-1)+`px`
+          switch(column){
+            case 1:
+              divMark.style.left = `0px`
+              break;
+            case 2:
+              divMark.style.left = `66px`
+              break;
+            case 3:
+              divMark.style.left = `270px`
+              break;
+            case 4:
+              divMark.style.left = `329px`
+              break;
+          }
+          divMark.style.display = "block"
+          codeExecuted+=code[i]
+          divLastCode.innerText = `Last Command:<br/>`+lastCodeText+`<br/>Total Executed:<br/>`+codeExecuted
+          divLastCode.innerHTML = `Last Command:<br/>`+lastCodeText+`<br/>Total Executed:<br/>`+codeExecuted
+          await sleep(250)
+        }
+        alert(`Line: ${line}, Column: ${column}`);
+    }
+
+  </script>
+</html>
