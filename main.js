@@ -41,6 +41,10 @@ app.get('/puzzle/', function(req, res){
   res.render('unownpuzzle');
 });
 
+app.get('/decoderAgatha/', function(req, res){
+  res.render('decoderAgatha');
+});
+
 //ERRORS:
 //mount the app requests with the functions
 app.use(function (err, req, res, next){
