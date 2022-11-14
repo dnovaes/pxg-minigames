@@ -14,7 +14,7 @@
   "author": "Bobito",
   "license": "ISC",
   "dependencies": {
-    "ejs": "^2.5.7",
+    "ejs": "^3.1.8",
     "express": "^4.15.4"
   }
 }
